@@ -59,6 +59,43 @@ class Utilizador {
         }
     }
 
+    public static function getList() {
+        $sql = new Sql();
+        
+        return $sql->select("SELECT * FROM utilizador ORDER BY nome;");
+    }
+
+    public static function search($nome) {
+        $sql = new Sql();
+
+        return $sql->select("SELECT * FROM utilizador WHERE nome LIKE :SEARCH ORDER BY nome", array(
+            ':SEARCH'=>"%".$nome."%"
+
+        ));
+    }
+
+    public function login($username, $password) {
+        
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM  utilizador WHERE nome = :NOME AND senha = :PASSWORD", array(
+            ":NOME"=>$username,
+            ":PASSWORD"=>$password
+        ));
+
+        if (count($results) > 0) {
+
+            $row = $results[0];
+
+            $this->setId($row['id']);  
+            $this->setNome($row['nome']);
+            $this->setEmail($row['email']);
+            $this->setSenha($row['senha']);   
+        } else {
+            throw new Exception("Login e/ou senha inválidos.");
+        }
+    }
+
     public function __toString() {
         return json_encode(array(
             "id"=>$this->getId(),

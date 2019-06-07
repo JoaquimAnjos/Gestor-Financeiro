@@ -6,7 +6,12 @@ class Sql extends PDO {
 
     public function __construct() {
 
-        $this->conn = new PDO("mysql:host=localhost;dbname=economize;charset=utf8", "root", "");
+        $this->conn = new PDO("mysql:host=localhost;dbname=economize", "root", "");
+        $this->conn->exec('SET CHARACTER SET utf8');
+        //$this->conn->exec("SET NAMES 'utf8'");
+        //$this->conn->exec('SET character_set_connection=utf8');
+        //$this->conn->exec('SET character_set_client=utf8');
+        //$this->conn->exec('SET character_set_results=utf8');
     }
 
     private function setParams($statement, $parameters = array()) {
@@ -20,7 +25,7 @@ class Sql extends PDO {
 
     private function setParam($statement, $key, $value) {
 
-        $statment->bindParam($key, $value);
+        $statement->bindParam($key, $value);
 
     }
 
