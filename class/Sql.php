@@ -29,21 +29,41 @@ class Sql extends PDO {
 
     }
 
-    public function query($rawQuery, $params = array()) {
+    private function querySelect($rawQuery, $params = array()) {
+        try {
 
-        $stmt = $this->conn->prepare($rawQuery);
-        $this->setParams($stmt, $params);
-        $stmt->execute();
+            $stmt = $this->conn->prepare($rawQuery);
+            $this->setParams($stmt, $params);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $rawQuery . "<br>" . $e->getMessage();
+        }
 
         return $stmt;
     }
-
+    
+    public function query($rawQuery, $params = array()) {
+        try {
+            
+            $stmt = $this->conn->prepare($rawQuery);
+            $this->setParams($stmt, $params);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo $rawQuery . "<br>" . $e->getMessage();
+        }
+        
+    }
+    
     public function select($rawQuery, $params = array()): array {
 
-        $stmt =  $this->query($rawQuery, $params);
+        $stmt =  $this->querySelect($rawQuery, $params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);//retorna um array de arrays
 
+    }
+    
+    public function closeConnection() {
+        $this->conn = null;
     }
 
 

@@ -1,18 +1,19 @@
 <?php 
 
-class Utilizador {
+class Utilizador { // falta fazer close na conexão
 
-    private $id;
+    private $idUtilizador;
     private $nome;
+    private $username;
     private $email;
     private $senha;
 
-    public function getId() {
-        return $this->id;
+    public function getIdUtilizador() {
+        return $this->idUtilizador;
     }
 
-    public function setId($value) {
-        $this->id = $value;
+    public function setIdUtilizador($value) {
+        $this->idUtilizador = $value;
     }
 
     public function getNome() {
@@ -21,6 +22,14 @@ class Utilizador {
 
     public function setNome($value) {
         $this->nome = $value;
+    }
+
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function setUsername($value) {
+        $this->username = $value;
     }
 
     public function getEmail() {
@@ -38,31 +47,44 @@ class Utilizador {
     public function setSenha($value) {
         $this->senha = $value;
     }
-
+    
     public function loadById($id) {
         $sql = new Sql();
-
-        $results = $sql->select("SELECT * FROM  utilizador WHERE id = :ID", array(
+        
+        $results = $sql->select("SELECT * FROM  utilizador WHERE id_utilizador = :ID", array(
             ":ID"=>$id
+        ));
+        
+        if (count($results) > 0) {
+            
+            $this->setDados($results[0]);
+            return $results;
+        }
+        
+        return $results;
+    }
+    
+
+    public function loadByUsername($username) {
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM  utilizador WHERE username = :USERNAME", array(
+            ":USERNAME"=>$username
         ));
 
         if (count($results) > 0) {
 
-            $row = $results[0];
-
-            $this->setId($row['id']);  
-            $this->setNome($row['nome']);
-            $this->setEmail($row['email']);
-            $this->setSenha($row['senha']);   
-            //$this->setDtcadastro(new DateTime($row['dtcdastro'])); caso houvesse data
-
+            $this->setDados($results[0]);
+            return $results;
         }
+        
+        return $results;
     }
 
     public static function getList() {
         $sql = new Sql();
         
-        return $sql->select("SELECT * FROM utilizador ORDER BY nome;");
+        return $sql->select("SELECT * FROM utilizador ORDER BY username");
     }
 
     public static function search($nome) {
@@ -78,28 +100,61 @@ class Utilizador {
         
         $sql = new Sql();
 
-        $results = $sql->select("SELECT * FROM  utilizador WHERE nome = :NOME AND senha = :PASSWORD", array(
-            ":NOME"=>$username,
-            ":PASSWORD"=>$password
+        $results = $sql->select("SELECT * FROM  utilizador WHERE username = :USERNAME AND senha = :PASSWORD", array(
+            ":USERNAME"=>$username,
+            ":PASSWORD"=>md5($password)
         ));
 
         if (count($results) > 0) {
 
-            $row = $results[0];
+            $this->setDados($results[0]);
+             
+        } /*else {
+            throw new Exception("Login e/ou senha inválido.");
+        }*/
+        return $results;
+    }
 
-            $this->setId($row['id']);  
-            $this->setNome($row['nome']);
-            $this->setEmail($row['email']);
-            $this->setSenha($row['senha']);   
-        } else {
-            throw new Exception("Login e/ou senha invÃ¡lidos.");
-        }
+    public function setDados($dados) {
+        $this->setIdUtilizador($dados['id_utilizador']);  
+        $this->setNome($dados['nome']);
+        $this->setUsername($dados['username']);
+        $this->setEmail($dados['email']);
+        $this->setSenha($dados['senha']);  
+        //$this->setDtcadastro(new DateTime($row['dtcdastro'])); caso houvesse data
+    }
+
+    public function insert($utilizador) {
+        $sql = new Sql();
+
+        return $sql->query("INSERT INTO utilizador (nome, username ,email, senha) values (:NOME, :USERNAME, :EMAIL, :SENHA)", array(
+            ':NOME'=>$utilizador->getNome(),
+            ':USERNAME'=>$utilizador->getUsername(),
+            ':EMAIL'=>$utilizador->getEmail(),
+            ':SENHA'=>$utilizador->getSenha()
+        ));
+        
+    }
+
+    public function update($utilizador) {
+        $sql = new Sql();
+
+        $sql->query("UPDATE utilizador SET nome = :NOME, username = :USERNAME, email = :EMAIL, senha = :SENHA WHERE id_utilizador = :ID", array(
+            ':NOME'=>$utilizador->getNome(),
+            ':USERNAME'=>$utilizador->getUsername(),
+            ':EMAIL'=>$utilizador->getEmail(),
+            ':SENHA'=>$utilizador->getSenha(),
+            ':ID'=> $utilizador->getIdUtilizador()
+
+        ));
+        
     }
 
     public function __toString() {
         return json_encode(array(
-            "id"=>$this->getId(),
+            "id_utilizador"=>$this->getIdUtilizador(),
             "nome"=>$this->getNome(),
+            "username"=>$this->getUsername(),
             "email"=>$this->getEmail(),
             "senha"=>$this->getSenha()
             //"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
