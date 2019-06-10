@@ -9,6 +9,10 @@ spl_autoload_register(function($class_name) {
     }
 });
 
+//Sess�o
+session_start();
+
+
 //ALT + SHIFT + F = format
 //CTRL + ALT + seta para baixo = fazer a mesma alteração para todos
 // html5= constroi pagina padrão html5

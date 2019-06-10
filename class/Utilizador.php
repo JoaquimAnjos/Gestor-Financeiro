@@ -58,7 +58,6 @@ class Utilizador { // falta fazer close na conexão
         if (count($results) > 0) {
             
             $this->setDados($results[0]);
-            return $results;
         }
         
         return $results;
@@ -75,16 +74,9 @@ class Utilizador { // falta fazer close na conexão
         if (count($results) > 0) {
 
             $this->setDados($results[0]);
-            return $results;
         }
         
         return $results;
-    }
-
-    public static function getList() {
-        $sql = new Sql();
-        
-        return $sql->select("SELECT * FROM utilizador ORDER BY username");
     }
 
     public static function search($nome) {
@@ -132,20 +124,6 @@ class Utilizador { // falta fazer close na conexão
             ':USERNAME'=>$utilizador->getUsername(),
             ':EMAIL'=>$utilizador->getEmail(),
             ':SENHA'=>$utilizador->getSenha()
-        ));
-        
-    }
-
-    public function update($utilizador) {
-        $sql = new Sql();
-
-        $sql->query("UPDATE utilizador SET nome = :NOME, username = :USERNAME, email = :EMAIL, senha = :SENHA WHERE id_utilizador = :ID", array(
-            ':NOME'=>$utilizador->getNome(),
-            ':USERNAME'=>$utilizador->getUsername(),
-            ':EMAIL'=>$utilizador->getEmail(),
-            ':SENHA'=>$utilizador->getSenha(),
-            ':ID'=> $utilizador->getIdUtilizador()
-
         ));
         
     }

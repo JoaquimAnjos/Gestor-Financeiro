@@ -1,0 +1,43 @@
+@charset "ISO-8859-1";
+body {
+	margin: 0;
+}
+
+div#interface {
+	margin: 50px 10px 10px 10px;
+}
+
+/*Formatação menu*/
+
+nav#menu {
+	display:block; 
+}
+
+nav#menu ul{
+	list-style: none;
+	text-transform: uppercase;
+	position: absolute;
+	top: -20px;
+	left: 300px
+}
+
+nav#menu li { 
+	display: inline-block;
+	background-color: #dddddd;	
+	padding: 10px;/*espaço dentro do objeto*/
+	margin: 2px;/*espaço fora do objeto*/
+	transition: background-color 1s;
+}
+
+nav#menu ul li:hover   {
+	background-color: #606060;
+}
+
+nav#menu a {
+	color: #000000;
+	text-decoration: none;
+}
+
+nav#menu a:hover {
+	color: #ffffff;
+}

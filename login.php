@@ -1,8 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=iso-8859-1');
 require_once ("config.php");
-// Sessão
-session_start();
 
 // botão enviar
 if (isset($_POST['btn-entrar'])) {
@@ -52,9 +50,10 @@ if (! empty($erros)) {
 }
 ?>
 	<hr>
-	<form name="loginform" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-		<label>Username: </label> <input type="text" name="username"><br> <label>Password:
-		</label> <input type="password" name="senha"><br> 
+	<form name="login_form" method="POST"
+		action="<?php echo $_SERVER['PHP_SELF'];?>">
+		<label>Username: </label> <input type="text" name="username"><br> 
+		<label>Password:</label> <input type="password" name="senha"><br> 
 		<input type="submit" name="btn-entrar" value="Entrar"> 
 		<a href="cadastro.php">Registe-se</a>
 

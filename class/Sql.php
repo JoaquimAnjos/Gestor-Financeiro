@@ -19,7 +19,6 @@ class Sql extends PDO {
         foreach ($parameters as $key => $value) {
 
             $this->setParam($statement, $key, $value);
-
         }
     }
 
@@ -29,7 +28,7 @@ class Sql extends PDO {
 
     }
 
-    private function querySelect($rawQuery, $params = array()) {
+    public function query($rawQuery, $params = array()) {
         try {
 
             $stmt = $this->conn->prepare($rawQuery);
@@ -42,21 +41,9 @@ class Sql extends PDO {
         return $stmt;
     }
     
-    public function query($rawQuery, $params = array()) {
-        try {
-            
-            $stmt = $this->conn->prepare($rawQuery);
-            $this->setParams($stmt, $params);
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo $rawQuery . "<br>" . $e->getMessage();
-        }
-        
-    }
-    
     public function select($rawQuery, $params = array()): array {
 
-        $stmt =  $this->querySelect($rawQuery, $params);
+        $stmt =  $this->query($rawQuery, $params);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);//retorna um array de arrays
 
