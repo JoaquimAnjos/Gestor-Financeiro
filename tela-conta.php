@@ -6,12 +6,10 @@ require_once("config.php");
 require_once ("config-sessao.php");
  
 // $nome= $_SESSION['nome'];
+$idUtilizador = $_SESSION['id_utilizador'];
 $conta = new Conta();
-$count = $conta->countRows();
+$count = $conta->countRows($idUtilizador);
 $total = $count[0]['total'];
-
-$results = $conta->loadAll();
-
 
 ?>
 
@@ -20,24 +18,14 @@ $results = $conta->loadAll();
 <head>
 <meta charset="UTF-8">
 <title>Criação da Conta</title>
-<link rel="stylesheet" type="text/css" href="css/style.css"/>
-</head>
-<body>
-<!-- <div id = "menu"> -->
-<div id ="interface">
-<nav id = "menu"> 
-<ul>
-<li><a href = "tela-transacao.php">Transações</a></li>
-<li><a href = "tela-conta.php">Minhas Contas</a></li>
-<li><a href = "criacao-transacao.php">Criar Transação</a></li>
-<li><a href = "criacao-conta.php">Criar Conta</a></li>
-<li><a href="logout.php">Logout</a></li>
-</ul>
-</nav>
-<!--  </div>-->
+
+<?php include_once 'header.php';?>
+
 <h1>Contas</h1>
 
-	<?php if ($total > 0) { ?>
+	<?php if ($total > 0) { 
+	    $results = $conta->loadByIdUtilizador($idUtilizador);
+	?>
 
 		<table width="50%" border="1">
 			<thead>
@@ -45,6 +33,7 @@ $results = $conta->loadAll();
 					<th>Nome da Conta</th>
 					<th>Valor Inicial da Conta</th>
 					<th>Tipo de Conta</th>
+					<th>Valor atual da Conta</th>
 					<th>Ações</th>
 				</tr>
 			</thead>
@@ -52,8 +41,9 @@ $results = $conta->loadAll();
 			  	<?php foreach ($results as $result) { ?>
 					<tr>
 						<td><?php echo utf8_decode($result['nome']); ?></td>
-	                    <td><?php echo utf8_decode($result['valor']); ?></td>
+	                    <td><?php echo $result['valor_inicial']; ?></td>
 	                    <td><?php echo utf8_decode($result['tipo']); ?></td>
+	                    <td><?php echo $result['valor_atual']; ?></td>
 	                    <td>
                         <a href="form-editar.php?id=<?php echo $result['id'] ?>">Editar</a>
                         <a href="apagar-conta.php?id=<?php echo $result['id'] ?>" onclick="return confirm('Tem certeza de que deseja remover?');">Remover</a>
@@ -68,6 +58,4 @@ $results = $conta->loadAll();
         <p>Nenhuma conta associada!</p>
  
         <?php } ?>
-</div>
-</body>
-</html>
+    	<?php include_once 'footer.php';?>

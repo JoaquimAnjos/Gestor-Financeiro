@@ -31,9 +31,8 @@ $tipos = $conta->getListTipoConta();
         <meta charset="utf-8">
  
         <title>Editar Conta</title>
-    </head>
- 
-    <body>
+
+<?php include_once 'header.php';?>
  
         <h1>Editar dados do Banco</h1>
          
@@ -50,7 +49,6 @@ foreach ($tipos as $tipo) {
 <option value="<?php echo $idTipoConta?>" <?= ($idTipoConta == $results[0]['id_tipo_conta'])? 'selected':''?>><?php echo utf8_decode($nomeTipoConta)?></option>
 <!-- O utf8_decode vai servir para permitir carateres especiais -->
 <?php }?>
-<!-- <option value="<?php //echo $results[0]['id_tipo_conta']?>"><?php //echo utf8_decode($results[0]['tipo'])?></option>-->
 </select><br>
 <label>Valor inicial da conta</label><input type="text" name="valor_inicial" value="<?php echo utf8_decode($results[0]['valor']);?>"/><br>
 <input type="hidden" name="id" value="<?php echo $id ?>">
@@ -58,5 +56,4 @@ foreach ($tipos as $tipo) {
 </form>
 <button onclick="window.location.href='tela-conta.php';">Voltar</button>
  
-    </body>
-</html>
+<?php include_once 'footer.php';?>

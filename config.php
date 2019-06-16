@@ -9,6 +9,8 @@ spl_autoload_register(function($class_name) {
     }
 });
 
+date_default_timezone_set('Europe/London');
+
 //Sessão
 session_start();
 

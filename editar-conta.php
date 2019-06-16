@@ -23,10 +23,12 @@ $conta->setIdTipoConta($idTipoConta);
 $conta->setValorInicial($valorInicial);
 $conta->setIdConta($id);
 $stmt = $conta->update($conta);
+
 if ($stmt->rowCount() > 0) {
     header('Location: tela-conta.php');
 } else {
     echo "Não houve alterações da Conta.<br>";
     echo "<button onclick=\"window.location.href='tela-conta.php';\">Voltar</button>";
 }
+
 ?>

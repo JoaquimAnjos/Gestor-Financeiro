@@ -14,32 +14,16 @@ if (isset($_POST['criar-conta'])) {
     
     $validacao = $nomeConta != null && $idTipoConta != null && $valorInicial != null;
     
-    
 }
-
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Criação da Conta</title>
-<link rel="stylesheet" type="text/css" href="css/style.css"/>
-</head>
-<body>
-<!-- <div id = "menu"> -->
-<div id ="interface">
-<nav id = "menu"> 
-<ul>
-<li><a href = "tela-transacao.php">Transações</a></li>
-<li><a href = "tela-conta.php">Minhas Contas</a></li>
-<li><a href = "criacao-transacao.php">Criar Transação</a></li>
-<li><a href = "criacao-conta.php">Criar Conta</a></li>
-<li><a href="logout.php">Logout</a></li>
-</ul>
-</nav>
-<!--  </div>-->
+<title>Criação Conta</title>
+
+<?php include_once 'header.php';?>
+
 <h1>Insira a sua Conta Bancária</h1>
  <?php
  if (isset($_POST['criar-conta'])) {
@@ -47,9 +31,10 @@ if (isset($_POST['criar-conta'])) {
      if (!$validacao) {
          $erros[] = "<li> Todos os campos precisam ser preenchidos</li>";
      }else{
-         $conta->setNomeConta($nomeConta);
+         $conta->setNomeConta(utf8_encode($nomeConta));
          $conta->setIdTipoConta($idTipoConta);
          $conta->setValorInicial((double)$valorInicial);
+         $conta->setIdUtilizador($_SESSION['id_utilizador']);
          $stmt = $conta->insert($conta);
  if ($stmt->rowCount() > 0) {
      echo "Gravado com sucesso";
@@ -84,9 +69,7 @@ foreach ($results as $result) {
 <label>Valor inicial da conta</label><input type="text" name="valor_inicial"/><br>
 <input type ="submit" name="criar-conta" value="Criar Conta"><!-- não pode colocar o name com _  exemplo:criar_conta -->
 </form>
-</div>
-</body>
-</html>
+<?php include_once 'footer.php';?>
 
 
 

@@ -52,6 +52,16 @@ if (isset($_POST['registar'])) {
  <input type="submit" name="registar" value="Registar"/>
  </form>
  <button onclick="window.location.href='index.php';">Voltar</button>
-     
+ 
+<!--  <h2>Selecione um novo arquivo de imagem</h2>
+    
+  <form enctype="multipart/form-data" action="upload.php" method="post">
+  <div><input name="nome_evento" type="text"/></div>
+  <div><input name="descricao_evento" type="textarea"/></div>   -->   
+  <!--  <input type="hidden" name="MAX_FILE_SIZE" value="99999999"/> este não é para apagar-->
+     <!--   <div><input name="imagem" type="file"/></div>
+      <div><input type="submit" value="Salvar"/></div>
+  </form>-->
+    
  </body>
  </html>
