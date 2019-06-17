@@ -8,9 +8,10 @@ class Conta {
     private $valorAtual;
     private $idTipoConta;
     private $idUtilizador;
+    private $valorReceita;
+    private $valorDespesa;
     
-    
-    
+
     public function getIdConta()
     {
         return $this->idConta;
@@ -33,12 +34,23 @@ class Conta {
     
     public function getValorAtual()
     {
-        return $this->getValorInicial();
+        
+        return $this->getSaldoAtual() + $this->getValorReceita() - $this->getValorDespesa();
     }
     
     public function getIdUtilizador()
     {
         return $this->idUtilizador;
+    }
+    
+    public function getValorReceita()
+    {
+        return $this->valorReceita;
+    }
+    
+    public function getValorDespesa()
+    {
+        return $this->valorDespesa;
     }
 
     public function setIdConta($idConta)
@@ -64,6 +76,16 @@ class Conta {
     public function setIdUtilizador($idUtilizador)
     {
         $this->idUtilizador = $idUtilizador;
+    }
+    
+    public function setValorReceita($valorReceita)
+    {
+        $this->valorReceita = $valorReceita;
+    }
+    
+    public function setValorDespesa($valorDespesa)
+    {
+        $this->valorDespesa = abs($valorDespesa);
     }
     
 
@@ -106,15 +128,15 @@ class Conta {
                  ));
     }
     
-    public function insert($conta) {
+    public function insert() {
         $sql = new Sql();
         
         return $sql->query("INSERT INTO conta (nome, valor_inicial, valor_atual ,fk_id_tipo_conta, fk_id_utilizador) values (:NOME, :VALOR_INICIAL, :VALOR_ATUAL,:ID_TIPO_CONTA, :ID_UTILIZADOR)", array(
-            ':NOME'=>$conta->getNomeConta(),
-            ':VALOR_INICIAL'=>$conta->getValorInicial(),
-            ':VALOR_ATUAL'=>$conta->getValorAtual(),
-            ':ID_TIPO_CONTA'=>$conta->getIdTipoConta(),
-            ':ID_UTILIZADOR'=>$conta->getIdUtilizador()
+            ':NOME'=>$this->getNomeConta(),
+            ':VALOR_INICIAL'=>$this->getValorInicial(),
+            ':VALOR_ATUAL'=>$this->getValorInicial(),
+            ':ID_TIPO_CONTA'=>$this->getIdTipoConta(),
+            ':ID_UTILIZADOR'=>$this->getIdUtilizador()
         ));
         
     }
@@ -148,6 +170,76 @@ class Conta {
             ':ID_UTILIZADOR'=>$idUtilizador
         ));
     }
+    
+    public function getValorReceitaAtual() {
+        $sql = new Sql();
+        
+        $results = $sql->select("SELECT total_receita FROM conta where id_conta = :ID_CONTA", array(
+            ':ID_CONTA'=>$this->getIdConta()
+            ));
+        return $results[0]['total_receita'];
+    }
+    
+    public function getValorDespesaAtual() {
+        $sql = new Sql();
+        
+        $results = $sql->select("SELECT total_despesa FROM conta where id_conta = :ID_CONTA", array(
+            ':ID_CONTA'=>$this->getIdConta()
+        ));
+        return $results[0]['total_despesa'];
+    }
+    
+    public function getSaldoAtual() {
+        $sql = new Sql();
+        
+        $results = $sql->select("SELECT valor_atual FROM conta where id_conta = :ID_CONTA", array(
+            ':ID_CONTA'=>$this->getIdConta()
+        ));
+        return $results[0]['valor_atual'];
+    }
+    
+    public function getTotalReceita() {
+        //var_dump($this->getValorReceitaAtual() + $this->getValorReceita());
+        return $this->getValorReceitaAtual() + $this->getValorReceita();
+    }
+    
+    public function getTotalDespesa() {
+        var_dump($this->getValorDespesaAtual());
+        var_dump($this->getValorDespesa());
+        //var_dump($this->getValorDespesaAtual() + $this->getValorDespesa());
+        return $this->getValorDespesaAtual() + abs($this->getValorDespesa());
+    }
+    
+    public function updateReceita() {
+        $sql = new Sql();
+        
+        return $sql->query("UPDATE conta SET total_receita = :TOTAL_RECEITA WHERE id_conta = :ID", array(
+                
+            ':TOTAL_RECEITA'=> $this->getTotalReceita(),
+            ':ID'=> $this->getIdConta()
+            ));
+    }
+    
+    public function updateDespesa() {
+        $sql = new Sql();
+        
+        return $sql->query("UPDATE conta SET total_despesa = :TOTAL_DESPESA WHERE id_conta = :ID", array(
+            
+            ':TOTAL_DESPESA'=> $this->getTotalDespesa(),
+            ':ID'=> $this->getIdConta()
+        ));
+    }
+    
+    public function updateSaldoAtual() {
+        $sql = new Sql();
+        
+        return $sql->query("UPDATE conta SET valor_atual = :VALOR_ATUAL WHERE id_conta = :ID", array(
+            
+            ':VALOR_ATUAL'=> $this->getValorAtual(),
+            ':ID'=> $this->getIdConta()
+        ));
+    }
+    
 }
 
 ?>

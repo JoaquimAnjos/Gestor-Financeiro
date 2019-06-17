@@ -18,7 +18,7 @@ if (empty($nomeConta) || empty($idTipoConta) || empty($valorInicial) || empty($i
 
 // atualiza o banco
 $conta= new Conta();
-$conta->setNomeConta($nomeConta);
+$conta->setNomeConta(utf8_encode($nomeConta));
 $conta->setIdTipoConta($idTipoConta);
 $conta->setValorInicial($valorInicial);
 $conta->setIdConta($id);

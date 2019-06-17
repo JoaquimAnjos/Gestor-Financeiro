@@ -25,14 +25,13 @@ echo $data."<br>";
 echo $id."<br>";
 // atualiza a transação
 $transacao= new Transacao();
-$transacao->setDescricao($descricao);
+$transacao->setDescricao(utf8_encode($descricao));
 $transacao->setIdConta($idConta);
 $transacao->setIdTipo($idTipoTransacao);
 $transacao->setValor(abs($valor));
 $transacao->setData($data);
 $transacao->setIdTransacao($id);
 $stmt = $transacao->update();
-var_dump($transacao);
 if ($stmt->rowCount() > 0) {
     header('Location: tela-transacao.php');
 } else {
@@ -40,3 +39,11 @@ if ($stmt->rowCount() > 0) {
     echo "<button onclick=\"window.location.href='tela-transacao.php';\">Voltar</button>";
 }
 ?>
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body></body>
+</html>    

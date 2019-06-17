@@ -9,7 +9,7 @@ class Transacao {
     private $idTipo;
     private $idConta;
     private $idUtilizador;
-    
+    private $conta;
     
     
     public function getIdTransacao()
@@ -45,6 +45,11 @@ class Transacao {
     public function getIdUtilizador()
     {
         return $this->idUtilizador;
+    }
+    
+    public function getConta()
+    {
+        return $this->conta;
     }
     
     public function setIdTransacao($idTransacao)
@@ -85,6 +90,12 @@ class Transacao {
     {
         $this->idUtilizador = $idUtilizador;
     }
+    
+    public function setConta($conta)
+    {
+        $this->conta = $conta;
+    }
+       
     
     public function loadByIdUtilizador() {
         $sql = new Sql();
@@ -176,6 +187,8 @@ class Transacao {
                 ':ID'=> $this->getIdTransacao()
             ));
     }
+    
+    
     
     /*public static function getListTipoConta() {
         $sql = new Sql();

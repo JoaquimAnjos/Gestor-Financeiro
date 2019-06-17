@@ -17,7 +17,7 @@ $resultTransacoes = $transacao->getTiposTransacao();
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Criação Conta</title>
+<title>Criação Transação</title>
 
 <?php include_once 'header.php';?>
 
@@ -31,10 +31,10 @@ $resultTransacoes = $transacao->getTiposTransacao();
      $valor = isset($_POST['valor']) && !empty($_POST['valor'])? $_POST['valor'] : null;
      $data = isset($_POST['data']) && !empty($_POST['data'])? $_POST['data'] : null;
      
-     $validacaoContas = $descricao != null && $tipoConta != null && $tipoTransacao != null && $valor != null && $data != null;
+     $validacaoTransacao = $descricao != null && $tipoConta != null && $tipoTransacao != null && $valor != null && $data != null;
      
  
- if (!$validacaoContas) {
+     if (!$validacaoTransacao) {
          $erros[] = "<li> Todos os campos precisam ser preenchidos</li>";
      }else{
          $transacao->setDescricao(utf8_encode($descricao));
@@ -44,6 +44,21 @@ $resultTransacoes = $transacao->getTiposTransacao();
          $transacao->setData($data);
          $stmt = $transacao->insert();
  if ($stmt->rowCount() > 0) {
+     
+     if ($transacao->getIdTipo() == 1){
+         $conta = new Conta();
+         $conta->setIdConta($transacao->getIdConta());
+         $conta->setValorReceita($transacao->getValor());
+         $conta->updateReceita();
+         $conta->updateSaldoAtual();
+     } else {
+         $conta = new Conta();
+         $conta->setIdConta($transacao->getIdConta());
+         $conta->setValorDespesa($transacao->getValor());
+         $conta->updateDespesa();
+         $conta->updateSaldoAtual();
+     }
+     
      echo "Gravado com sucesso";
   } else {
       $erros[] = "<li>Erro ao criar conta!</li>";
@@ -78,7 +93,7 @@ foreach ($resultTransacoes as $result) {
   <option value="<?php echo $idTipoTransacao?>"><?php echo utf8_decode($result['descricao'])?></option>
 <?php }?>
  </select><br>
-<label>Valor da Transação</label><input type="number" name="valor"/><br>
+<label>Valor da Transação</label><input type="text" name="valor"/><br>
 <label>Data da Transação</label><input type="datetime-local" name="data" value="<?php echo $date->format('Y-m-d\TH:i');?>"/><br>
 <input type ="submit" name="criar-transacao" value="Criar Transação">
 </form>

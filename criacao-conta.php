@@ -35,7 +35,7 @@ if (isset($_POST['criar-conta'])) {
          $conta->setIdTipoConta($idTipoConta);
          $conta->setValorInicial((double)$valorInicial);
          $conta->setIdUtilizador($_SESSION['id_utilizador']);
-         $stmt = $conta->insert($conta);
+         $stmt = $conta->insert();
  if ($stmt->rowCount() > 0) {
      echo "Gravado com sucesso";
      $_POST['nome_conta'] = null;

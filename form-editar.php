@@ -41,7 +41,6 @@ $tipos = $conta->getListTipoConta();
 <label>Tipo de Conta</label>
 <select name="tipos_conta">
 <?php  
-var_dump($results[0]['id_tipo_conta']);
 foreach ($tipos as $tipo) {
     $idTipoConta = $tipo['id_tipo_conta'];
     $nomeTipoConta = $tipo['nome'];
