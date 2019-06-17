@@ -33,14 +33,14 @@ if (isset($_POST['criar-conta'])) {
      }else{
          $conta->setNomeConta(utf8_encode($nomeConta));
          $conta->setIdTipoConta($idTipoConta);
-         $conta->setValorInicial((double)$valorInicial);
+         $conta->setValorInicial($valorInicial);//(double)
          $conta->setIdUtilizador($_SESSION['id_utilizador']);
          $stmt = $conta->insert();
  if ($stmt->rowCount() > 0) {
      echo "Gravado com sucesso";
-     $_POST['nome_conta'] = null;
+     //$_POST['nome_conta'] = null;
      //$_POST['tipos_conta']= null;
-     $_POST['valor_inicial'] = null;
+     //$_POST['valor_inicial'] = null;
   } else {
       $erros[] = "<li>Erro ao criar conta!</li>";
      }

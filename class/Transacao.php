@@ -67,7 +67,7 @@ class Transacao {
         if ( $this->getIdTipo() == 1) {
             $this->valor = $valor;
         } else {
-            $this->valor = -$valor;
+            $this->valor = -abs($valor);
         }
     }
 
@@ -96,17 +96,16 @@ class Transacao {
         $this->conta = $conta;
     }
        
-    
     public function loadByIdUtilizador() {
         $sql = new Sql();
         
         return $sql->select("SELECT t.id_transacao as id, t.descricao as descricao, t.valor as valor, t.data_transacao as data_transacao, 
-               CONCAT(c.nome, ' - ',tc.nome) as conta ,tt.descricao as tipo_transacao FROM transacao t
+               CONCAT(c.nome, ' - ',tc.nome) as conta, c.id_conta as id_conta ,tt.descricao as tipo_transacao FROM transacao t
                INNER JOIN tipo_transacao tt ON (t.fk_id_tipo_transacao = tt.id_tipo_transacao)
                INNER JOIN conta c ON (t.fk_id_conta = c.id_conta)
                INNER JOIN tipo_conta tc ON (c.fk_id_tipo_conta= tc.id_tipo_conta)
                INNER JOIN utilizador u ON (t.fk_id_utilizador = u.id_utilizador) WHERE id_utilizador=:ID_UTILIZADOR ORDER BY data_transacao", array(
-                   ':ID_UTILIZADOR'=>$this->getIdUtilizador()
+               ':ID_UTILIZADOR'=>$this->getIdUtilizador()
                ));
     }
     
@@ -120,7 +119,7 @@ class Transacao {
                INNER JOIN conta c ON (t.fk_id_conta = c.id_conta)
                INNER JOIN tipo_conta tc ON (c.fk_id_tipo_conta= tc.id_tipo_conta)
                INNER JOIN utilizador u ON (t.fk_id_utilizador = u.id_utilizador) WHERE id_transacao=:ID", array(
-                   ':ID'=>$this->getIdTransacao()
+               ':ID'=>$this->getIdTransacao()
                ));
     }
 
@@ -168,7 +167,7 @@ class Transacao {
         $sql = new Sql();
         
         return $sql->query("DELETE FROM transacao WHERE id_transacao= :ID", array(
-            ':ID'=>$this->getIdUtilizador()
+            ':ID'=>$this->getIdTransacao()
         ));
     }
     
@@ -178,7 +177,6 @@ class Transacao {
         return $sql->query("UPDATE transacao SET descricao = :DESCRICAO, valor = :VALOR,
             data_transacao = :DATA_TRANSACAO, fk_id_tipo_transacao = :ID_TIPO_TRANSACAO,
              fk_id_conta = :ID_CONTA WHERE id_transacao = :ID", array(
-                
                 ':DESCRICAO'=>$this->getDescricao(),
                 ':VALOR'=>$this->getValor(),
                 ':DATA_TRANSACAO'=>$this->getData(),
@@ -188,13 +186,13 @@ class Transacao {
             ));
     }
     
-    
-    
-    /*public static function getListTipoConta() {
+    public function getValorById() {
         $sql = new Sql();
         
-        return $sql->select("SELECT * FROM tipo_conta ORDER BY nome");
-    }*/
+        return $sql->select("SELECT valor, fk_id_conta as id_conta FROM transacao WHERE id_transacao = :ID", array(
+            ':ID'=>$this->getIdTransacao()
+        ));
+    }
     
 }
 

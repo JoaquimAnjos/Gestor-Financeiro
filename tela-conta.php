@@ -8,7 +8,8 @@ require_once ("config-sessao.php");
 // $nome= $_SESSION['nome'];
 $idUtilizador = $_SESSION['id_utilizador'];
 $conta = new Conta();
-$count = $conta->countRows($idUtilizador);
+$conta->setIdUtilizador($idUtilizador);
+$count = $conta->countRows();
 $total = $count[0]['total'];
 
 ?>
@@ -46,7 +47,7 @@ $total = $count[0]['total'];
 	                    <td><?php echo $result['valor_atual']; ?></td>
 	                    <td>
                         <a href="form-editar.php?id=<?php echo $result['id'] ?>">Editar</a>
-                        <a href="apagar-conta.php?id=<?php echo $result['id'] ?>" onclick="return confirm('Tem certeza de que deseja remover?');">Remover</a>
+                        <a href="apagar-conta.php?id=<?php echo $result['id'] ?>" onclick="return confirm('Tem certeza de que deseja remover?\n Esta decisão pode apagar todas as suas transações!\n Confira se tem alguma transação importante.');">Remover</a>
                     	</td>
 					</tr>
 					<?php } ?>

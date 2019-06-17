@@ -7,10 +7,16 @@ require_once ("config-sessao.php");
  
 $date = new DateTime();
 
+$idUtilizador = $_SESSION['id_utilizador'];
 $transacao = new Transacao();
-$transacao->setIdUtilizador($_SESSION['id_utilizador']);
+$transacao->setIdUtilizador($idUtilizador);
 $resultContas = $transacao->getContas();
 $resultTransacoes = $transacao->getTiposTransacao();
+
+$conta = new Conta();
+$conta->setIdUtilizador($idUtilizador);
+$count = $conta->countRows();
+$total = $count[0]['total'];
 
 ?>
 <!DOCTYPE html>
@@ -22,7 +28,9 @@ $resultTransacoes = $transacao->getTiposTransacao();
 <?php include_once 'header.php';?>
 
 <h1>Crie as suas Transações</h1>
+
  <?php
+ if ($total > 0) {
  if (isset($_POST['criar-transacao'])) {
      $erros = array();
      $descricao = isset($_POST['descricao']) && !empty($_POST['descricao'])? $_POST['descricao'] : null;
@@ -97,5 +105,11 @@ foreach ($resultTransacoes as $result) {
 <label>Data da Transação</label><input type="datetime-local" name="data" value="<?php echo $date->format('Y-m-d\TH:i');?>"/><br>
 <input type ="submit" name="criar-transacao" value="Criar Transação">
 </form>
+
+<?php } else { ?>
+ 
+        <p>Crie uma Conta para criar as suas Transações</p>
+ 
+        <?php } ?>
 
 <?php include_once 'footer.php';?>

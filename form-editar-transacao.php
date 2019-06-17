@@ -34,7 +34,7 @@ $dadosConta = $conta->getContaParaEditar();
     <head>
         <meta charset="utf-8">
  
-        <title>Editar Transação<?php //echo $_SESSION['id_utilizador']?></title>
+        <title>Editar Transação</title>
         
 <?php include_once 'header.php';?>
  
@@ -43,17 +43,16 @@ $dadosConta = $conta->getContaParaEditar();
 <form method="POST" name="form_editar_transacao" action="editar-transacao.php">
 <label>Descrição da transação</label>
 <input type="text" name="descricao" value="<?php echo utf8_decode($results[0]['descricao']);?>" /><br>
-<label>Conta</label>
-<select name="contas">
+ <!--<label>Conta</label>-->
+<!--  <select name="contas">-->
 <?php  
-foreach ($dadosConta as $dadoConta) {
+/*foreach ($dadosConta as $dadoConta) {
     $idConta = $dadoConta['id_conta'];
     $nomeConta = $dadoConta['conta'];
-    ?>
-<option value="<?php echo $idConta?>" <?= ($idConta == $results[0]['id_conta'])? 'selected':''?>><?php echo utf8_decode($nomeConta)?></option>
-<?php }?>
-<!-- <option value="<?php //echo $results[0]['id_tipo_conta']?>"><?php //echo utf8_decode($results[0]['tipo'])?></option>-->
-</select><br>
+    */?>
+<!--<option value="<?php //echo $idConta?>" <?php //=($idConta == $results[0]['id_conta'])? 'selected':''?>><?php //echo utf8_decode($nomeConta)?></option>-->
+<?php //}?>
+<!-- </select><br> -->
 <label>Tipo de Transação</label>
 <select name="tipos_transacao">
 <?php  
@@ -62,13 +61,11 @@ foreach ($tiposTransacao as $tipoTransacao) {
     $descricaoTransacao = $tipoTransacao['descricao'];
     ?>
 <option value="<?php echo $idTipoTransacao?>" <?= ($idTipoTransacao == $results[0]['id_tipo_transacao'])? 'selected':''?>><?php echo utf8_decode($descricaoTransacao)?></option>
-<!-- O utf8_decode vai servir para permitir carateres especiais -->
 <?php }?>
-<!-- <option value="<?php //echo $results[0]['id_tipo_conta']?>"><?php //echo utf8_decode($results[0]['tipo'])?></option>-->
 </select><br>
 
-<label>Valor da Transação</label><input type="text" name="valor" value="<?php echo utf8_decode(abs($results[0]['valor']));?>"/><br>
-<label>Valor da Transação Escondida</label><input type="text" name="valor-escondido" value="<?php echo utf8_decode($results[0]['valor']);?>"/><br>
+<label>Valor da Transação</label><input type="text" name="valor" value="<?php echo utf8_decode($results[0]['valor']);?>"/><br>
+<input type="hidden" name="valor-anterior" value="<?php echo utf8_decode($results[0]['valor']);?>"/>
 <label>Data da Transação</label><input type="datetime-local" name="data" value="<?php echo $date->format('Y-m-d\TH:i');?>"/><br>
 <input type="hidden" name="id" value="<?php echo $id ?>">
 <input type ="submit" name ="alterar" value="Alterar">

@@ -22,9 +22,10 @@ $conta->setNomeConta(utf8_encode($nomeConta));
 $conta->setIdTipoConta($idTipoConta);
 $conta->setValorInicial($valorInicial);
 $conta->setIdConta($id);
-$stmt = $conta->update($conta);
+$stmt = $conta->update();
 
 if ($stmt->rowCount() > 0) {
+    $conta->updateSaldoAtual();
     header('Location: tela-conta.php');
 } else {
     echo "Não houve alterações da Conta.<br>";

@@ -14,7 +14,9 @@ if (empty($id))
 }
 // remove do banco
 $conta = new Conta();
-$stmt = $conta->delete($id);
+$conta->setIdConta($id);
+$conta->deleteTransacao();
+$stmt = $conta->delete();
 if ($stmt->rowCount() > 0) {
     header('Location: tela-conta.php');
 } else {

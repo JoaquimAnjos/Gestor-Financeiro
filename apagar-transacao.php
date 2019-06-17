@@ -13,11 +13,26 @@ if (empty($id))
     echo "ID não informado";
     exit;
 }
-// remove do banco
+// remove da base de dados
 $transacao = new Transacao();
-$transacao->setIdUtilizador($id);
+$transacao->setIdTransacao($id);
+$result = $transacao->getValorById();
+$valorTransacao = $result[0]['valor'];
+$idConta = $result[0]['id_conta'];
 $stmt = $transacao->delete();
+
 if ($stmt->rowCount() > 0) {
+    $conta = new Conta();
+    $conta->setIdConta($idConta);
+    if ($valorTransacao > 0) {
+        $conta->setValorReceita(-$valorTransacao);
+        $conta->updateReceita();
+        $conta->updateSaldoAtual();  
+    } else {
+        $conta->setValorDespesa(-$valorTransacao);
+        $conta->updateDespesa();
+        $conta->updateSaldoAtual();  
+    }
     header('Location: tela-transacao.php');
 } else {
     echo "Erro ao remover";
