@@ -65,7 +65,7 @@ class Transacao {
     public function setValor($valor)
     {
         if ( $this->getIdTipo() == 1) {
-            $this->valor = $valor;
+            $this->valor = abs($valor);
         } else {
             $this->valor = -abs($valor);
         }

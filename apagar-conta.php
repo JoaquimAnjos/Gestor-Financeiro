@@ -12,7 +12,7 @@ if (empty($id))
     echo "ID não informado";
     exit;
 }
-// remove do banco
+
 $conta = new Conta();
 $conta->setIdConta($id);
 $conta->deleteTransacao();

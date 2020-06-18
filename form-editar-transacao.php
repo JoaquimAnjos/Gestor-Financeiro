@@ -25,7 +25,6 @@ if (!is_array($results)) {
     exit;
 }
 $tiposTransacao = $transacao->getTiposTransacao();
-$dadosConta = $conta->getContaParaEditar();
 
 ?>
 
@@ -35,41 +34,100 @@ $dadosConta = $conta->getContaParaEditar();
         <meta charset="utf-8">
  
         <title>Editar Transação</title>
-        
+        <link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <?php include_once 'header.php';?>
  
-        <h1>Editar dados da Transição</h1>
-         
-<form method="POST" name="form_editar_transacao" action="editar-transacao.php">
-<label>Descrição da transação</label>
-<input type="text" name="descricao" value="<?php echo utf8_decode($results[0]['descricao']);?>" /><br>
- <!--<label>Conta</label>-->
-<!--  <select name="contas">-->
-<?php  
-/*foreach ($dadosConta as $dadoConta) {
-    $idConta = $dadoConta['id_conta'];
-    $nomeConta = $dadoConta['conta'];
-    */?>
-<!--<option value="<?php //echo $idConta?>" <?php //=($idConta == $results[0]['id_conta'])? 'selected':''?>><?php //echo utf8_decode($nomeConta)?></option>-->
-<?php //}?>
-<!-- </select><br> -->
-<label>Tipo de Transação</label>
-<select name="tipos_transacao">
-<?php  
-foreach ($tiposTransacao as $tipoTransacao) {
-    $idTipoTransacao = $tipoTransacao['id_tipo_transacao'];
-    $descricaoTransacao = $tipoTransacao['descricao'];
-    ?>
-<option value="<?php echo $idTipoTransacao?>" <?= ($idTipoTransacao == $results[0]['id_tipo_transacao'])? 'selected':''?>><?php echo utf8_decode($descricaoTransacao)?></option>
-<?php }?>
-</select><br>
+        <div class="container">
+	<center>
+		<h1>Editar dados da Transação</h1>
+	</center>
+	<table class="table table-striped">
+		<tbody>
+			<tr>
+				<td colspan="1">
+					<form class="well form-horizontal" method="POST" name="form_editar_transacao" action="editar-transacao.php">
+						<input type="hidden" name="contas" value="<?php echo $results[0]['id_conta'] ?>">
+						<input type="hidden" name="id" value="<?php echo $id ?>">
+						<input type="hidden" name="valor-anterior" required value="<?php echo utf8_decode($results[0]['valor']);?>"/>
+						<fieldset>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Descrição da transação</label>
+								<div class="col-md-8 inputGroupContainer">
+									<div class="input-group">
+										<span class="input-group-addon"></span><input
+											name="descricao" placeholder="Descrição da transação"
+											class="form-control" required="true" value="<?php echo utf8_decode($results[0]['descricao']);?>" type="text">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Tipo de Transação</label>
+								<div class="col-md-8 inputGroupContainer">
+									<div class="input-group">
+										<span class="input-group-addon"></span> <select
+											class="selectpicker form-control" name="tipos_transacao">
+                                                  <?php  
+                                                foreach ($tiposTransacao as $tipoTransacao) {
+                                                    $idTipoTransacao = $tipoTransacao['id_tipo_transacao'];
+                                                    $descricaoTransacao = $tipoTransacao['descricao'];
+                                                    ?>
+                                                <option value="<?php echo $idTipoTransacao?>" <?= ($idTipoTransacao == $results[0]['id_tipo_transacao'])? 'selected':''?>><?php echo utf8_decode($descricaoTransacao)?></option>
+                                                <?php }?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Valor da Transação</label>
+								<div class="col-md-8 inputGroupContainer">
+									<div class="input-group">
+										<span class="input-group-addon"></span><input
+											name="valor" placeholder="Valor da Transação" id="valor"
+											class="form-control" required="true" value="<?php echo abs($results[0]['valor']);?>" type="text">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Data da Transação</label>
+								<div class="col-md-8 inputGroupContainer">
+									<div class="input-group">
+										<span class="input-group-addon"></span><input
+											name="data" 
+											class="form-control" required="true" value="<?php echo $date->format('Y-m-d\TH:i');?>" type="datetime-local">
+									</div>
+								</div>
+							</div>
+							<a href="tela-transacao.php" class="btn btn-info">Cancelar</a>
+							<input type="submit" name="alterar" onclick="verificarValor();" class="btn btn-success" value="Alterar">
+						</fieldset>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 
-<label>Valor da Transação</label><input type="text" name="valor" value="<?php echo utf8_decode($results[0]['valor']);?>"/><br>
-<input type="hidden" name="valor-anterior" value="<?php echo utf8_decode($results[0]['valor']);?>"/>
-<label>Data da Transação</label><input type="datetime-local" name="data" value="<?php echo $date->format('Y-m-d\TH:i');?>"/><br>
-<input type="hidden" name="id" value="<?php echo $id ?>">
-<input type ="submit" name ="alterar" value="Alterar">
-</form>
-<button onclick="window.location.href='tela-transacao.php';">Voltar</button>
+<script type="text/javascript">
+function verificarValor() {
+	var valor = form_editar_transacao.valor.value;
+	  var campoValor = document.getElementById('valor');
+	  
+	  var regra = /^[0-9]+$/;
+	  //if (valor.match(regra) && valor > 0.00) {
+	  if (!isNaN(parseFloat(valor)) && isFinite(valor) && valor > 0.00) {
+		  campoValor.setCustomValidity("");
+	  } else {
+		  campoValor.setCustomValidity("Preencha o campo com valores numéricos superiores a 0!");
+	  }
+};    
+</script>
  
 <?php include_once 'footer.php';?>
+
+

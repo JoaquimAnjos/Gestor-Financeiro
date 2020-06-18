@@ -1,6 +1,5 @@
 <?php
 ?>
 
-</div>
 </body>
 </html>

@@ -118,7 +118,8 @@ class Conta {
         $sql = new Sql();
         
         return $sql->select("select c.id_conta as id, c.nome as nome, c.valor_inicial as valor_inicial,
-                 c.valor_atual as valor_atual, tc.nome as tipo, u.username as username from conta as c 
+                 c.valor_atual as valor_atual, c.total_receita as total_receita, c.total_despesa as total_despesa,
+                 tc.nome as tipo, u.username as username from conta as c 
                  inner join utilizador as u ON (c.fk_id_utilizador=u.id_utilizador)
                  inner join tipo_conta tc ON (c.fk_id_tipo_conta=tc.id_tipo_conta) 
                  where u.id_utilizador=:ID_UTILIZADOR ORDER BY c.nome", array(

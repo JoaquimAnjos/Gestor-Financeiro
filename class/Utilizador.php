@@ -1,6 +1,6 @@
 <?php 
 
-class Utilizador { // falta fazer close na conexão
+class Utilizador { 
 
     private $idUtilizador;
     private $nome;
@@ -101,9 +101,7 @@ class Utilizador { // falta fazer close na conexão
 
             $this->setDados($results[0]);
              
-        } /*else {
-            throw new Exception("Login e/ou senha inválido.");
-        }*/
+        } 
         return $results;
     }
 
@@ -113,7 +111,6 @@ class Utilizador { // falta fazer close na conexão
         $this->setUsername($dados['username']);
         $this->setEmail($dados['email']);
         $this->setSenha($dados['senha']);  
-        //$this->setDtcadastro(new DateTime($row['dtcdastro'])); caso houvesse data
     }
 
     public function insert($utilizador) {
@@ -135,7 +132,6 @@ class Utilizador { // falta fazer close na conexão
             "username"=>$this->getUsername(),
             "email"=>$this->getEmail(),
             "senha"=>$this->getSenha()
-            //"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
         ));
     }
 
